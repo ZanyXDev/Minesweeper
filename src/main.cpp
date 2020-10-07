@@ -21,10 +21,15 @@
 
 int main(int argc, char *argv[])
 {
-    //Q_INIT_RESOURCE(minesweeper);
+    Q_INIT_RESOURCE(resources);
+
     QApplication app(argc, argv);
 
-    app.setApplicationName("Minesweeper");
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+    QCoreApplication::setOrganizationName("ZanyXDev Softworks");
+    QCoreApplication::setOrganizationDomain("github.com/zanyxdev");
+    QCoreApplication::setApplicationName("Minesweeper QT5 version");
 
     MainWindow wnd;
     wnd.show();

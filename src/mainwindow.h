@@ -8,6 +8,17 @@
 #include <QMenuBar>
 #include <QAction>
 #include <QDebug>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPixmap>
+#include <QPushButton>
+#include <QLabel>
+#include <QLCDNumber>
+#include <QTimer>
+#include <QDebug>
+#include <QMessageBox>
+
+#define PICTURE_SIZE 48
 
 class MainWindow : public QMainWindow
 {
@@ -21,13 +32,18 @@ public:
         HARD
     };
 signals:
+    void timeChanged(int m_time);
+    void minesChanged(int m_time);
 
 public slots:  
+    void startNewGame();
+    void gameOver();
 
 private slots:
     void newEasy();
     void newMedium();
     void newHard();
+    void updateTime();
 
 protected:
     void keyPressEvent(QKeyEvent *event);
@@ -36,10 +52,21 @@ protected:
 private:
     void newGame();
     void setupMenu();
+    void initGUI();
+
+    void initConnection();
 
     LevelTypes m_level;
     quint8 m_size;
-    quint8 m_mines;
+    quint16 round_mines_count;
+    quint16 round_time_count;
+
+    QTimer *roundTimer;
+
+    QPushButton *newGameBtn;
+
+    QLCDNumber *timerLcd;
+    QLCDNumber *minesLcd;
 };
 
 

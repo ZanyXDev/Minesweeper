@@ -1,5 +1,5 @@
 /*
- *  Minesweeper classic game 
+ *  Minesweeper classic game
  *  Copyright (C) 2020  Zany XDev <zanyxdev@gmail.com>
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -21,11 +21,15 @@
 
 int main(int argc, char *argv[])
 {
+    /**
+      * @note Attribute Qt::AA_EnableHighDpiScaling must be set before
+      * QCoreApplication is created.
+     */
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
     Q_INIT_RESOURCE(resources);
 
     QApplication app(argc, argv);
-
-    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QCoreApplication::setOrganizationName("ZanyXDev Softworks");
     QCoreApplication::setOrganizationDomain("github.com/zanyxdev");

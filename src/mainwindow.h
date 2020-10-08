@@ -17,6 +17,9 @@
 #include <QTimer>
 #include <QDebug>
 #include <QMessageBox>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
 
 #define PICTURE_SIZE 48
 
@@ -53,20 +56,27 @@ private:
     void newGame();
     void setupMenu();
     void initGUI();
-
     void initConnection();
+    void setupScene(quint8 size_x, quint8 size_y, quint16 mines_count);
 
     LevelTypes m_level;
     quint8 m_size;
     quint16 round_mines_count;
     quint16 round_time_count;
 
-    QTimer *roundTimer;
+    quint8 gameFieldSizeX;
+    quint8 gameFieldSizeY;
+    quint16 minesCount;
 
+    QTimer *roundTimer;
     QPushButton *newGameBtn;
 
     QLCDNumber *timerLcd;
     QLCDNumber *minesLcd;
+
+    QGraphicsView *boardView;
+    QGraphicsScene *boardScene;
+
 };
 
 

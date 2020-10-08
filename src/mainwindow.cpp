@@ -1,14 +1,27 @@
 #include "mainwindow.h"
 
+#define DIRTY_DEBUG 1
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , round_mines_count(0)
     , round_time_count(0)
+    , gameFieldSizeX(0)
+    , gameFieldSizeY(0)
+    , minesCount(0)
 {    
     roundTimer = new QTimer();
     setupMenu();
     initGUI();
     initConnection();
+
+#ifdef DIRTY_DEBUG
+    // FIXME add save load settings
+    gameFieldSizeX = 9;
+    gameFieldSizeY = 9;
+    minesCount = 10;
+#endif
+    setupScene(gameFieldSizeX,gameFieldSizeY,minesCount);
 }
 
 /// @note Public slots
@@ -17,11 +30,13 @@ void MainWindow::startNewGame()
     round_time_count = 0;
     round_mines_count = 0;
     roundTimer->start( 1000 );
+    setupScene(gameFieldSizeX,gameFieldSizeY,minesCount);
 }
 
 void MainWindow::gameOver()
 {
     roundTimer->stop();
+    // FIXME need gameOver window
     QMessageBox::information(this, "Game over","Sorry you lose");
 }
 
@@ -61,6 +76,17 @@ void MainWindow::initGUI()
     minesLcd = new QLCDNumber();
     newGameBtn = new QPushButton();
 
+    boardScene = new QGraphicsScene();
+    boardView =new QGraphicsView();    
+    boardView->setScene(boardScene);
+
+    /**
+    boardView.setRenderHint(QPainter::Antialiasing, false);
+    boardView.setDragMode(QGraphicsView::RubberBandDrag);
+    boardView.setOptimizationFlags(QGraphicsView::DontSavePainterState);
+    boardView.setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    boardView.setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+    */
 
     /// @note setup new game Pushbutton
     newGameBtn->setMinimumSize(PICTURE_SIZE, PICTURE_SIZE);
@@ -98,8 +124,10 @@ void MainWindow::initGUI()
     infoFrameLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding));
     infoFrameLayout->addWidget(minesLabel);
     infoFrameLayout->addWidget(minesLcd);
+
+    mainFrameLayout->setSpacing(5);
     mainFrameLayout->addLayout(infoFrameLayout);
-    mainFrameLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    mainFrameLayout->addWidget(boardView);
 
     central->setLayout(mainFrameLayout);
     setCentralWidget(central);
@@ -114,6 +142,28 @@ void MainWindow::initConnection()
     connect(roundTimer, &QTimer::timeout, this, &MainWindow::updateTime);
 
     connect(timerLcd, &QLCDNumber::overflow,this, &MainWindow::gameOver);
+}
+
+void MainWindow::setupScene(quint8 size_x, quint8 size_y, quint16 mines_count)
+{
+
+    ///@note hardcoded !!!
+    boardView->setMinimumSize(QSize(250,250));
+    boardView->setSceneRect(QRect(0,0,250,250));
+
+    QPixmap tilePix(":/tile_empty");
+
+    QGraphicsPixmapItem * item;
+    for (int x = 0 ; x < 9; x++ )
+    {
+        for (int y = 0 ; y < 9; y++ )
+        {
+            item = new QGraphicsPixmapItem(tilePix.scaled(24,24,Qt::KeepAspectRatio));
+            item->setFlag(QGraphicsItem::ItemIsMovable);
+            item->setPos((x * 24), (y * 24));
+            boardScene->addItem(item);
+        }
+    }
 }
 
 void MainWindow::newGame()

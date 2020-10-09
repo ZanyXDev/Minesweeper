@@ -20,11 +20,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 RESOURCES     = resources.qrc
 
 HEADERS += \
-    src/mainwindow.h  
+    src/mainwindow.h   \
+    src/tileitem.h
 
 SOURCES = \
     src/main.cpp \
-    src/mainwindow.cpp 
+    src/mainwindow.cpp  \
+    src/tileitem.cpp
 
 CONFIG += \
     console \

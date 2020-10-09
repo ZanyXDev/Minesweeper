@@ -13,6 +13,7 @@
         <file alias="game_settings">images/48x48_game_settings.png</file>
         <file alias="watch">images/512x512_stopwatch.png</file>
         <file alias="tile_empty">images/128x128_tile_empty.png</file>
+        <file alias="tile_full">images/128x128_tile_full.png</file>
 	<file alias="tile_one">images/128x128_tile_one.png</file>
     </qresource>
 </RCC>

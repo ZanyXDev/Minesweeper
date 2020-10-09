@@ -13,7 +13,17 @@ class TileItem : public QGraphicsPixmapItem
 {
 
 public:
-    TileItem(const QPixmap &pixmap,
+    /**
+     * @brief TileItem
+     * @param pixmap
+     * @param effect
+     * @param parent
+     * @note explicit,  это ключевое слово ставится перед объявлением
+     * конструктора с одним параметром (или с большим числом параметров,
+     * но когда все параметры, начиная со второго, имеют значения по умолчанию)
+     * и предотвращает неявное преобразование типов при инициализации.
+     */
+   explicit TileItem(const QPixmap &pixmap,
                    QGraphicsEffect *effect= nullptr,
                    QGraphicsItem *parent = nullptr);
 

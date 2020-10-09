@@ -9,19 +9,37 @@ MainWindow::MainWindow(QWidget *parent)
     , gameFieldSizeX(0)
     , gameFieldSizeY(0)
     , minesCount(0)
-{    
+{
+
     roundTimer = new QTimer();
     setupMenu();
     initGUI();
     initConnection();
 
 #ifdef DIRTY_DEBUG
-    // FIXME add save load settings
+    // TODO add save load settings
     gameFieldSizeX = 9;
     gameFieldSizeY = 9;
     minesCount = 10;
 #endif
+    qDebug() << "After create. "
+             << " BoardView rect:"
+             << " height:"  << boardView->height()
+             << " width:" << boardView->width();
+    qDebug() << " Scene Rect: "
+             << " height:" << boardView->sceneRect().height()
+             << " width:" << boardView->sceneRect().width();
+
     setupScene(gameFieldSizeX,gameFieldSizeY,minesCount);
+
+    qDebug() << "After create. "
+             << " BoardView rect:"
+             << " height:"  << boardView->height()
+             << " width:" << boardView->width();
+    qDebug() << " Scene Rect: "
+             << " height:" << boardView->sceneRect().height()
+             << " width:" << boardView->sceneRect().width();
+    qDebug() << "boardView->scene()->sceneRect() " << boardView->scene()->sceneRect();
 }
 
 /// @note Public slots
@@ -30,13 +48,20 @@ void MainWindow::startNewGame()
     round_time_count = 0;
     round_mines_count = 0;
     roundTimer->start( 1000 );
+
+#ifdef DIRTY_DEBUG
+
+    gameFieldSizeX = 16;
+    gameFieldSizeY = 16;
+    minesCount = 99;
+#endif
     setupScene(gameFieldSizeX,gameFieldSizeY,minesCount);
 }
 
 void MainWindow::gameOver()
 {
     roundTimer->stop();
-    // FIXME need gameOver window
+    // TODO need create gameOver window
     QMessageBox::information(this, "Game over","Sorry you lose");
 }
 
@@ -77,9 +102,10 @@ void MainWindow::initGUI()
     newGameBtn = new QPushButton();
 
     boardScene = new QGraphicsScene();
-    boardView =new QGraphicsView();    
+    boardView =new QGraphicsView();
     boardView->setScene(boardScene);
-
+    boardView->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
+    boardView->setVerticalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
     /**
     boardView.setRenderHint(QPainter::Antialiasing, false);
     boardView.setDragMode(QGraphicsView::RubberBandDrag);
@@ -94,7 +120,7 @@ void MainWindow::initGUI()
     newGameBtn->setIcon(QIcon(":/emoji/smile"));
 
     /// @note setup Pixmap labels
-    /// @note need find or resize exist picture from 512 to 48 pixel
+    /// FIXME need find or resize exist picture from 512 to 48 pixel
     QPixmap timerCounterPix(QPixmap(":/watch"));
     QPixmap minesCounterPix(QPixmap(":/mine"));
     watchLabel->setPixmap(timerCounterPix.scaled(PICTURE_SIZE,PICTURE_SIZE,Qt::KeepAspectRatio));
@@ -116,7 +142,6 @@ void MainWindow::initGUI()
     minesLcd->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     minesLcd->setFixedSize(QSize(72,48));
 
-    /// @note setup gui element to form
     infoFrameLayout->addWidget(watchLabel);
     infoFrameLayout->addWidget(timerLcd);
     infoFrameLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::MinimumExpanding));
@@ -144,24 +169,28 @@ void MainWindow::initConnection()
     connect(timerLcd, &QLCDNumber::overflow,this, &MainWindow::gameOver);
 }
 
+
 void MainWindow::setupScene(quint8 size_x, quint8 size_y, quint16 mines_count)
 {
+    quint16 scene_height = (size_x + 2) * TILE_SIZE;
+    quint16 scene_width =  (size_y + 2) * TILE_SIZE;
 
-    ///@note hardcoded !!!
-    boardView->setMinimumSize(QSize(250,250));
-    boardView->setSceneRect(QRect(0,0,250,250));
+    boardScene->clear();
+    /// TODO add fitToView
+    boardView->setMinimumSize( QSize( scene_height, scene_width)  );
+    boardView->setSceneRect( QRect(0,0,scene_height,scene_width ) );
 
-    QPixmap tilePix(":/tile_empty");
+    QPixmap tilePix(":/tile_full");
 
-    QGraphicsPixmapItem * item;
-    for (int x = 0 ; x < 9; x++ )
+    auto blurEffect = new QGraphicsBlurEffect();
+    for (int x = 0 ; x < size_x; x++ )
     {
-        for (int y = 0 ; y < 9; y++ )
+        for (int y = 0 ; y < size_y; y++ )
         {
-            item = new QGraphicsPixmapItem(tilePix.scaled(24,24,Qt::KeepAspectRatio));
-            item->setFlag(QGraphicsItem::ItemIsMovable);
-            item->setPos((x * 24), (y * 24));
-            boardScene->addItem(item);
+            TileItem * item3 = new TileItem(tilePix.scaled(TILE_SIZE,TILE_SIZE,Qt::KeepAspectRatio),blurEffect);
+            item3->setAcceptHoverEvents( true );
+            item3->setPos((x * TILE_SIZE)+TILE_SIZE, (y * TILE_SIZE)+TILE_SIZE);
+            boardScene->addItem(item3);
         }
     }
 }
@@ -204,6 +233,13 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
     QMainWindow::keyReleaseEvent(event);
+}
+void MainWindow::resizeEvent(QResizeEvent *)
+{
+    /// TODO need move to QGraphicsView::resizeEvent
+    QRectF bounds = boardView->scene()->sceneRect();
+    boardView->fitInView(bounds, Qt::KeepAspectRatio);
+    boardView->centerOn(bounds.center());
 }
 
 /// @note Private slots

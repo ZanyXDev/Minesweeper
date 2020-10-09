@@ -20,8 +20,12 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsBlurEffect>
+
+#include "tileitem.h"
 
 #define PICTURE_SIZE 48
+#define TILE_SIZE 24
 
 class MainWindow : public QMainWindow
 {
@@ -49,8 +53,9 @@ private slots:
     void updateTime();
 
 protected:
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event) override;
+    virtual void keyReleaseEvent(QKeyEvent *event) override;
+    virtual void resizeEvent(QResizeEvent *event) override;
 
 private:
     void newGame();

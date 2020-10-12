@@ -7,7 +7,26 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPixmap>
+#include <QPushButton>
+#include <QLabel>
+#include <QLCDNumber>
+#include <QTimer>
 #include <QDebug>
+#include <QMessageBox>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsPixmapItem>
+#include <QGraphicsBlurEffect>
+
+#include "tileitem.h"
+#include "gameboardview.h"
+
+#define PICTURE_SIZE 48
+#define TILE_SIZE 24
+
 
 class MainWindow : public QMainWindow
 {
@@ -21,17 +40,24 @@ public:
         HARD
     };
 signals:
-
+    void timeChanged(int m_time);
+    void minesChanged(int m_time);
 public slots:  
+
+    void startNewGame();
+    void gameOver();
 
 private slots:
     void newEasy();
     void newMedium();
     void newHard();
+    void updateTime();
 
 protected:
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event) override;
+    virtual void keyReleaseEvent(QKeyEvent *event) override;
+    virtual void resizeEvent(QResizeEvent *event) override;
+
 
 private:
     void newGame();
@@ -40,6 +66,28 @@ private:
     LevelTypes m_level;
     quint8 m_size;
     quint8 m_mines;
+
+    void initGUI();
+    void initConnection();
+    void setupScene(quint8 size_x, quint8 size_y, quint16 mines_count);
+
+    quint16 round_mines_count;
+    quint16 round_time_count;
+
+    quint8 gameFieldSizeX;
+    quint8 gameFieldSizeY;
+    quint16 minesCount;
+
+    QTimer *roundTimer;
+    QPushButton *newGameBtn;
+
+    QLCDNumber *timerLcd;
+    QLCDNumber *minesLcd;
+
+    GameBoardView *boardView;
+    QGraphicsScene *boardScene;
+
+
 };
 
 

@@ -35,7 +35,8 @@ public:
     int getPosition() const;
 
     enum { Type = UserType + 1 };
-    int type() const override { return Type; }+
+    int type() const override { return Type; }
+
 public slots:
     void setPosition(int position);
 

@@ -23,6 +23,7 @@
 #include <QGraphicsBlurEffect>
 
 #include "tileitem.h"
+#include "gameboardview.h"
 
 #define PICTURE_SIZE 48
 #define TILE_SIZE 24
@@ -79,7 +80,7 @@ private:
     QLCDNumber *timerLcd;
     QLCDNumber *minesLcd;
 
-    QGraphicsView *boardView;
+    GameBoardView *boardView;
     QGraphicsScene *boardScene;
 
 };

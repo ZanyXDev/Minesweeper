@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
              << " height:" << boardView->sceneRect().height()
              << " width:" << boardView->sceneRect().width();
     qDebug() << "boardView->scene()->sceneRect() " << boardView->scene()->sceneRect();
+
 }
 
 /// @note Public slots
@@ -102,7 +103,7 @@ void MainWindow::initGUI()
     newGameBtn = new QPushButton();
 
     boardScene = new QGraphicsScene();
-    boardView =new QGraphicsView();
+    boardView =new GameBoardView();
     boardView->setScene(boardScene);
     boardView->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
     boardView->setVerticalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
@@ -183,14 +184,16 @@ void MainWindow::setupScene(quint8 size_x, quint8 size_y, quint16 mines_count)
     QPixmap tilePix(":/tile_full");
 
     auto blurEffect = new QGraphicsBlurEffect();
-    for (int x = 0 ; x < size_x; x++ )
+    for (int y = 0 ; y < size_y; y++ )
     {
-        for (int y = 0 ; y < size_y; y++ )
+        for (int x = 0 ; x < size_x; x++ )
         {
-            TileItem * item3 = new TileItem(tilePix.scaled(TILE_SIZE,TILE_SIZE,Qt::KeepAspectRatio),blurEffect);
-            item3->setAcceptHoverEvents( true );
-            item3->setPos((x * TILE_SIZE)+TILE_SIZE, (y * TILE_SIZE)+TILE_SIZE);
-            boardScene->addItem(item3);
+            TileItem * cellItem = new TileItem(tilePix.scaled(TILE_SIZE,TILE_SIZE,Qt::KeepAspectRatio),blurEffect);
+            cellItem->setAcceptHoverEvents( true );
+            cellItem->setPos((x * TILE_SIZE)+TILE_SIZE, (y * TILE_SIZE)+TILE_SIZE);
+            int m_pos = y + x + y * (size_x - 1) + 1;
+            cellItem->setPosition( m_pos );
+            boardScene->addItem(cellItem);
         }
     }
 }

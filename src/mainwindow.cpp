@@ -102,7 +102,7 @@ void MainWindow::initGUI()
     newGameBtn = new QPushButton();
 
     boardScene = new QGraphicsScene();
-    boardView =new QGraphicsView();
+    boardView =new GameBoardView();
     boardView->setScene(boardScene);
     boardView->setHorizontalScrollBarPolicy (Qt::ScrollBarAlwaysOff);
     boardView->setVerticalScrollBarPolicy (Qt::ScrollBarAlwaysOff);

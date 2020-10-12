@@ -20,10 +20,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 RESOURCES     = resources.qrc
 
 HEADERS += \
+    src/gameboardview.h \
     src/mainwindow.h   \
     src/tileitem.h
 
 SOURCES = \
+    src/gameboardview.cpp \
     src/main.cpp \
     src/mainwindow.cpp  \
     src/tileitem.cpp

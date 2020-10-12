@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="flag">images/flag.png</file>
+        <file alias="mine">images/256x256_mine.png</file>
+        <file alias="explosion">images/explosion.png</file>
+        <file alias="tada">images/tada.png</file>
+        <file alias="wrong">images/wrong.png</file>
+        <file alias="emoji/smile">images/smile_emoji.png</file>
+        <file alias="emoji/injured">images/injured_emoji.png</file>
+        <file alias="emoji/sunglasses">images/sunglasses_emoji.png</file>
+        <file alias="emoji/wow">images/wow_emoji.png</file>
+        <file alias="new_game">images/128x128_new_game.png</file>
+        <file alias="game_settings">images/48x48_game_settings.png</file>
+        <file alias="watch">images/512x512_stopwatch.png</file>
+        <file alias="tile_empty">images/128x128_tile_empty.png</file>
+        <file alias="tile_full">images/128x128_tile_full.png</file>
+	<file alias="tile_one">images/128x128_tile_one.png</file>
+    </qresource>
+</RCC>

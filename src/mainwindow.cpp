@@ -187,10 +187,12 @@ void MainWindow::setupScene(quint8 size_x, quint8 size_y, quint16 mines_count)
     {
         for (int y = 0 ; y < size_y; y++ )
         {
-            TileItem * item3 = new TileItem(tilePix.scaled(TILE_SIZE,TILE_SIZE,Qt::KeepAspectRatio),blurEffect);
-            item3->setAcceptHoverEvents( true );
-            item3->setPos((x * TILE_SIZE)+TILE_SIZE, (y * TILE_SIZE)+TILE_SIZE);
-            boardScene->addItem(item3);
+            int m_pos = x * size_x + y * size_y;
+            TileItem * cellItem = new TileItem(tilePix.scaled(TILE_SIZE,TILE_SIZE,Qt::KeepAspectRatio),blurEffect);
+            cellItem->setAcceptHoverEvents( true );
+            cellItem->setPos((x * TILE_SIZE)+TILE_SIZE, (y * TILE_SIZE)+TILE_SIZE);
+            cellItem->setPosition( m_pos );
+            boardScene->addItem(cellItem);
         }
     }
 }
